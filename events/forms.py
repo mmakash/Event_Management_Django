@@ -32,3 +32,27 @@ class ParticipantForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['events'].queryset = Event.objects.all()
         self.fields['events'].widget.attrs.update({'class':'form-control'})
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name', 'description']
+        widgets = {
+            'name' : forms.TextInput(attrs={'class':'form-control'}),
+            'description' : forms.Textarea(attrs={'class':'form-control'}),
+        }
+
+class ParticipantForm(forms.ModelForm):
+    class Meta:
+        model = Participant
+        fields = ['name', 'email', 'events']
+        widgets = {
+            'name' : forms.TextInput(attrs={'class':'form-control'}),
+            'email' : forms.EmailInput(attrs={'class':'form-control'}),
+            'events' : forms.SelectMultiple(attrs={'class':'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['events'].queryset = Event.objects.all()
+        self.fields['events'].widget.attrs.update({'class':'form-control'})
