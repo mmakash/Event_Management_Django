@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <!-- Navbar and Heading -->
+        <div class="flex items-center mb-4 space-x-12">
+            <h1 class="text-3xl font-bold">Dashboard</h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li>
+                        <a href="{% url 'all_events' %}" class="text-gray-700 text-bold hover:text-gray-900">Events</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'category_list' %}" class="text-gray-700 text-bold hover:text-gray-900">Categories</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'all_participants' %}" class="text-gray-700 text-bold hover:text-gray-900">Participants</a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-gray-700 text-bold hover:text-gray-900">Settings</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <a href="{% url 'all_events' %}" class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                <h2 class="text-xl font-semibold">Events</h2>
+                <p class="text-gray-600">Manage your events</p>
+            </a>
+            <a href="{% url 'category_list' %}" class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                <h2 class="text-xl font-semibold">Categories</h2>
+                <p class="text-gray-600">Manage categories</p>
+            </a>
+            <a href="{% url 'all_participants' %}" class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                <h2 class="text-xl font-semibold">Participants</h2>
+                <p class="text-gray-600">Manage participants</p>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

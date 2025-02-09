@@ -3,13 +3,34 @@ from .models import Event, Category, Participant
 from .forms import EventForm, CategoryForm, ParticipantForm
 from django.contrib import messages
 from django.http import Http404
+from django.db.models import Count
 
 # Create your views here.
+def dashboard(request):
+    return render(request, 'dashboard.html')
 
 # Read Events
 def events_list(request):
-    events = Event.objects.all()
-    return render(request, 'events_list.html', {'events': events})
+    # events = Event.objects.all()
+    category_id = request.GET.get('category_id')
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+
+    events = Event.objects.select_related('category').prefetch_related('participants').all()
+
+    if category_id:
+        events = events.filter(category_id=category_id)
+
+    if start_date and end_date:
+        events = events.filter(date__range=[start_date, end_date])
+
+    total_participants = events.aggregate(total_participants=Count('participants'))
+
+
+    return render(request, 'events_list.html', {
+        'events': events,
+        'total_participants': total_participants['total_participants']
+        })
 
 # Create Event
 def create_event(request):
@@ -18,8 +39,7 @@ def create_event(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Event created successfully!')
-            print('Event created successfully!')
-            return redirect('event_list')
+            return redirect('all_events')
     else:
         form = EventForm()
     return render(request, 'event_form.html', {'form': form})
@@ -36,7 +56,7 @@ def update_event(request, event_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Event updated successfully!')
-            return redirect('event_list')
+            return redirect('all_events')
     else:
         form = EventForm(instance=event)
     
@@ -47,7 +67,7 @@ def delete_event(request, event_id):
     event = Event.objects.get(id=event_id)
     event.delete()
     messages.success(request, 'Event deleted successfully!')
-    return redirect('event_list')
+    return redirect('all_events')
 
 # Read Categories
 def category_list(request):
@@ -98,7 +118,7 @@ def participant_create(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Participant created successfully!')
-            return redirect('participant_list')
+            return redirect('all_participants')
     else:
         form = ParticipantForm()
     return render(request, 'participant_form.html', {'form': form})
@@ -111,7 +131,7 @@ def participant_update(request, participant_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Participant updated successfully!')
-            return redirect('participant_list')
+            return redirect('all_participants')
     else:    
         form = ParticipantForm(instance=participant)
     return render(request, 'participant_form.html', {'form': form})
@@ -121,4 +141,6 @@ def participant_delete(request, participant_id):
     participant = Participant.objects.get(id=participant_id)
     participant.delete()
     messages.success(request, 'Participant deleted successfully!')
-    return redirect('participant_list')
+    return redirect('all_participants')
+
+
