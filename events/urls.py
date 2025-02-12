@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import dashboard, events_list, create_event, update_event, delete_event, category_list, category_create, category_update, category_delete, participant_list, participant_create, participant_update, participant_delete
+from .views import dashboard, events_list,event_details, create_event, update_event, delete_event, category_list, category_create, category_update, category_delete, participant_list, participant_create, participant_update, participant_delete
 
 urlpatterns = [
     path('', dashboard, name='dashboard'),
@@ -7,6 +7,7 @@ urlpatterns = [
     path('create_event/', create_event, name='create_event'),
     path('update_event/<int:event_id>/', update_event, name='update_event'),
     path('delete_event/<int:event_id>/', delete_event, name='delete_event'),
+    path('event_details/<int:event_id>/', event_details, name='event_details'),
 
     path('category_list/', category_list, name='category_list'),
     path('create_category/', category_create, name='create_category'),

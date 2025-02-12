@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.http import Http404
 from django.db.models import Count
 from django.utils.timezone import now
+from datetime import date
 
 # Create your views here.
 def dashboard(request):
@@ -39,13 +40,43 @@ def events_list(request):
 
     total_participants = events.aggregate(total_participants=Count('participants'))['total_participants'] or 0
 
+    today = date.today()
+    today_events = events.filter(date=today)
+    upcoming_events_count = events.filter(date__gt=today).count()
+    past_events_count = events.filter(date__lt=today).count()
 
-
-    return render(request, 'events_list.html', {
-        'events': events,
-        'total_participants': total_participants
+    # Prepare event data for the template
+    event_data = []
+    for event in events:
+        event_data.append({
+            'id': event.id,
+            'name': event.name,
+            'date': event.date,
+            'category': event.category.name if event.category else "Uncategorized",
+            'participants': [participant.name for participant in event.participants.all()],
+            'participant_count': event.participants.count(),
         })
 
+    return render(request, 'events_list.html', {
+        'events': event_data,
+        'upcoming_events_count': upcoming_events_count,
+        'past_events_count': past_events_count,
+        'today_events': today_events,
+        'total_participants': total_participants
+        })
+# Read Event Details
+def event_details(request, event_id):
+    event = Event.objects.get(id=event_id)
+    event_data = {
+        'id': event.id,
+        'name': event.name,
+        'description': event.description,
+        'date': event.date,
+        'category': event.category.name if event.category else "Uncategorized",
+        'participants': [participant.name for participant in event.participants.all()],
+        'participant_count': event.participants.count(),
+    }
+    return render(request, 'event_details.html', {'event': event_data})
 # Create Event
 def create_event(request):
     if request.method == 'POST':

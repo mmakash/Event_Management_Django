@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Event Details</title>
+</head>
+<body>
+     <div class="container mx-auto p-4">
+        <!-- Navbar and Heading -->
+     <header class="text-gray-600 body-font">
+        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+          <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-green-500 rounded-full" viewBox="0 0 24 24">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+            <span href="{% url 'dashboard' %}" class="ml-3 text-xl">Event Management</span>
+          </a>
+          <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
+            <a href="{% url 'all_events' %}" class="mr-5 hover:text-gray-900">Event</a>
+            <a href="{% url 'category_list' %}" class="mr-5 hover:text-gray-900">Category</a>
+            <a href="{% url 'all_participants' %}" class="mr-5 hover:text-gray-900">Participant</a>
+            <a href="{% url 'dashboard' %}" class="mr-5 hover:text-gray-900">Dashboard</a>
+          </nav>
+        </div>
+    </header>
+    <h1 class="text-center text-7xl">Event Details</h1>
+    <section class="text-gray-600 body-font">
+      <div class="container px-5 py-24 mx-auto flex flex-wrap">
+        <div class="flex flex-wrap -mx-4 mt-auto mb-auto lg:w-1/2 sm:w-2/3 content-start sm:pr-10">
+          <div class="w-full sm:p-4 px-4 mb-6">
+            <h1 class="title-font font-medium text-xl mb-2 text-gray-900">{{event.name}}</h1>
+            <div class="leading-relaxed">{{event.description}}</div>
+          </div>
+          <div class="p-4 sm:w-1/2 lg:w-1/4 w-1/2">
+            <h2 class="title-font font-medium text-3xl text-gray-900">{{event.date}}</h2>
+            <p class="leading-relaxed">Date</p>
+          </div>
+          <div class="p-4 sm:w-1/2 lg:w-1/4 w-1/2">
+            <h2 class="title-font font-medium text-3xl text-gray-900">{{event.participant_count}}</h2>
+            <p class="leading-relaxed">Paticipants</p>
+          </div>
+          <div class="p-4 sm:w-1/2 lg:w-1/4 w-1/2">
+            <h2 class="title-font font-medium text-3xl text-gray-900">{{event.category}}</h2>
+            <p class="leading-relaxed">Category</p>
+          </div>
+        </div>
+        <div class="lg:w-1/2 sm:w-1/3 w-full rounded-lg overflow-hidden mt-6 sm:mt-0">
+          <img class="object-cover object-center w-full h-full" src="https://i.ibb.co.com/WpdVvyky/pexels-bertellifotografia-3321791.jpg" alt="stats">
+        </div>
+      </div>
+    </section>
+
+     </div>
+</body>
+</html>
