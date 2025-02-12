@@ -33,7 +33,7 @@
 
         <!-- Add Category Button -->
         <div class="text-center mb-6">
-            <a href="{% url 'create_category' %}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200">
+            <a href="{% url 'create_category' %}" class="mx-auto w-48 text-white bg-green-500 border-0 py-2 px-4 focus:outline-none hover:bg-green-600 rounded">
                 Add New Category
             </a>
         </div>
@@ -60,10 +60,10 @@
 
                             <!-- Actions (Edit and Delete) -->
                             <div class="space-x-2">
-                                <a href="{% url 'category_update' category.id %}" class="bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 transition duration-200">
+                                <a href="{% url 'category_update' category.id %}" class="mx-auto w-48 text-white bg-green-500 border-0 py-2 px-4 focus:outline-none hover:bg-green-600 rounded">
                                     Edit
                                 </a>
-                                <a href="{% url 'category_delete' category.id %}" class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition duration-200">
+                                <a href="{% url 'category_delete' category.id %}" class="mx-auto w-48 text-white bg-orange-500 border-0 py-2 px-4 focus:outline-none hover:bg-orange-600 rounded">
                                     Delete
                                 </a>
                             </div>

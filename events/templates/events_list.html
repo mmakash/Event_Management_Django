@@ -35,39 +35,71 @@
             <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Here is a list of all events with their details, including category and participants.</p>
         </div>
 
-        <!-- Event Table -->
-        <div class="lg:w-2/3 w-full mx-auto overflow-auto">
-            <table class="table-auto w-full text-left whitespace-no-wrap">
-                <thead>
-                    <tr>
-                        <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">Event Name</th>
-                        <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Date</th>
-                        <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Category</th>
-                        <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Participants</th>
-                        <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br">Participant Count</th>
-                        <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br">Details</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for event in events %}
-                        <tr>
-                            <td class="px-4 py-3">{{ event.name }}</td>
-                            <td class="px-4 py-3">{{ event.date }}</td>
-                            <td class="px-4 py-3">{{ event.category }}</td>
-                            <td class="px-4 py-3">
-                                <ul class="list-disc list-inside">
-                                    {% for participant in event.participants %}
-                                        <li>{{ participant }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </td>
-                            <td class="px-4 py-3 text-lg text-gray-900">{{ event.participant_count }}</td>
-                            <td><a href="{% url 'event_details' event.id %}" class="flex ml-auto text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded">Details</a></td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <!-- Search Form -->
+        <div class="flex justify-center mb-8">
+            <form method="get" action="{% url 'all_events' %}?search=search" class="flex items-center">
+                <input type="text" name="search" placeholder="Search events by name or location..." class="px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 w-64">
+                <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-r-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">Search</button>
+            </form>
         </div>
+
+        {% for message in messages %}
+            <div class="p-4 mb-4 text-sm text-red-700 bg-black rounded-lg">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <!-- Conditional Rendering Based on Events -->
+        {% if not events %}
+            <!-- No Events Found -->
+            <div class="text-center">
+                <h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900">
+                    {% if search_query %}
+                        No events match your search query.
+                    {% else %}
+                        No events exist yet.
+                    {% endif %}
+                </h1>
+            </div>
+        {% else %}
+            <!-- Event Table -->
+            <div class="lg:w-2/3 w-full mx-auto overflow-auto">
+                <table class="table-auto w-full text-left whitespace-no-wrap">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">Event Name</th>
+                            <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Date</th>
+                            <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Category</th>
+                            <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Participants</th>
+                            <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br">Participant Count</th>
+                            <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br">Edit</th>
+                            <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br">Delete</th>
+                            <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for event in events %}
+                            <tr>
+                                <td class="px-4 py-3">{{ event.name }}</td>
+                                <td class="px-4 py-3">{{ event.date }}</td>
+                                <td class="px-4 py-3">{{ event.category }}</td>
+                                <td class="px-4 py-3">
+                                    <ul class="list-disc list-inside">
+                                        {% for participant in event.participants %}
+                                            <li>{{ participant }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                                <td class="px-4 py-3 text-lg text-gray-900">{{ event.participant_count }}</td>
+                                <td class="px-4 py-3 text-lg text-gray-900"><a href="{% url 'update_event' event.id %}">Edit</a></td>
+                                <td class="px-4 py-3 text-lg text-gray-900"><a href="{% url 'delete_event' event.id %}">Delete</a></td>
+                                <td><a href="{% url 'event_details' event.id %}" class="flex ml-auto text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded">Details</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
 
         <!-- Buttons -->
         <div class="flex justify-center space-x-4 pl-4 mt-4 lg:w-2/3 w-full mx-auto">
@@ -82,6 +114,13 @@
             </form>
         </div>
     </section>
+
+    <script>
+        setTimeout(() => {
+            document.querySelectorAll('.p-4.mb-4').forEach(msg => msg.remove());
+        }, 3000); // Message disappears after 3 seconds
+        fetch(window.location.href, { method: 'GET', cache: 'no-store' });
+    </script>
 
 </body>
 </html>

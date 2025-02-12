@@ -3,7 +3,7 @@ from .models import Event, Category, Participant
 from .forms import EventForm, CategoryForm, ParticipantForm
 from django.contrib import messages
 from django.http import Http404
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.utils.timezone import now
 from datetime import date
 
@@ -25,12 +25,19 @@ def dashboard(request):
 
 # Read Events
 def events_list(request):
-    # events = Event.objects.all()
+    # Initialize the events queryset
+    events = Event.objects.select_related('category').prefetch_related('participants')
+
+    # Search functionality
+    search_query = request.GET.get('search')
+    if search_query:
+        # Use Q objects to search by multiple fields (e.g., name or location)
+        events = events.filter(Q(name__icontains=search_query) | Q(location__icontains=search_query))
+
+    # Existing filters
     category_id = request.GET.get('category_id')
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
-
-    events = Event.objects.select_related('category').prefetch_related('participants').all()
 
     if category_id:
         events = events.filter(category_id=category_id)
@@ -38,6 +45,7 @@ def events_list(request):
     if start_date and end_date:
         events = events.filter(date__range=[start_date, end_date])
 
+    # Calculate totals and counts
     total_participants = events.aggregate(total_participants=Count('participants'))['total_participants'] or 0
 
     today = date.today()
@@ -62,8 +70,10 @@ def events_list(request):
         'upcoming_events_count': upcoming_events_count,
         'past_events_count': past_events_count,
         'today_events': today_events,
-        'total_participants': total_participants
-        })
+        'total_participants': total_participants,
+        # 'search_query': search_query,  # Pass the search query to the template
+    })
+
 # Read Event Details
 def event_details(request, event_id):
     event = Event.objects.get(id=event_id)
