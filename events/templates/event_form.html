@@ -7,25 +7,50 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Create Event</title>
 </head>
-<body class="bg-gray-100 flex justify-center items-center h-screen">
+<body class="container mx-auto p-4 bg-gray-100">
+
+     <!-- Navbar and Heading -->
+     <header class="text-gray-600 body-font">
+        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+          <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-green-500 rounded-full" viewBox="0 0 24 24">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+            <span href="{% url 'dashboard' %}" class="ml-3 text-xl">Event Management</span>
+          </a>
+          <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
+            <a href="{% url 'all_events' %}" class="mr-5 hover:text-gray-900">Event</a>
+            <a href="{% url 'category_list' %}" class="mr-5 hover:text-gray-900">Category</a>
+            <a href="{% url 'all_participants' %}" class="mr-5 hover:text-gray-900">Participant</a>
+            <a href="{% url 'dashboard' %}" class="mr-5 hover:text-gray-900">Dashboard</a>
+          </nav>
+        </div>
+    </header>
+    
+
     <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
         <h2 class="text-2xl font-bold mb-4">Create Event</h2>
-        <div>
-            {% if messages %}
-                <ul>
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </div>
         <form method="POST" class="space-y-4">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Submit
             </button>
+
+            {% for message in messages %}
+            <div class="p-4 mb-4 text-sm text-red-700 bg-black rounded-lg">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         </form>
     </div>
+    <script>
+        setTimeout(() => {
+            document.querySelectorAll('.p-4.mb-4').forEach(msg => msg.remove());
+        }, 3000); // Message disappears after 3 seconds
+        fetch(window.location.href, { method: 'GET', cache: 'no-store' });
+    </script>
+    
 </body>
 </html>

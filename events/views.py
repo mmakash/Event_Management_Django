@@ -4,10 +4,23 @@ from .forms import EventForm, CategoryForm, ParticipantForm
 from django.contrib import messages
 from django.http import Http404
 from django.db.models import Count
+from django.utils.timezone import now
 
 # Create your views here.
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    events = Event.objects.select_related('category').prefetch_related('participants').all()
+    total_participants = events.aggregate(total_participants=Count('participants'))['total_participants'] or 0
+    total_events = events.count()
+    upcomming_events = events.filter(date__gte=now().date()).count()
+    past_events = events.filter(date__lt=now().date()).count()
+    todays_events = events.filter(date=now().date())
+    return render(request, 'dashboard.html',{
+        'total_participants': total_participants,
+        'total_events': total_events,
+        'upcomming_events': upcomming_events,
+        'past_events': past_events,
+        'todays_events': todays_events
+    })
 
 # Read Events
 def events_list(request):
@@ -24,12 +37,13 @@ def events_list(request):
     if start_date and end_date:
         events = events.filter(date__range=[start_date, end_date])
 
-    total_participants = events.aggregate(total_participants=Count('participants'))
+    total_participants = events.aggregate(total_participants=Count('participants'))['total_participants'] or 0
+
 
 
     return render(request, 'events_list.html', {
         'events': events,
-        'total_participants': total_participants['total_participants']
+        'total_participants': total_participants
         })
 
 # Create Event
@@ -39,10 +53,11 @@ def create_event(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Event created successfully!')
-            return redirect('all_events')
+            return redirect('create_event') 
     else:
         form = EventForm()
     return render(request, 'event_form.html', {'form': form})
+
 
 # Update Event
 def update_event(request, event_id):
@@ -56,10 +71,10 @@ def update_event(request, event_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Event updated successfully!')
-            return redirect('all_events')
+            return redirect('create_event')
+            # return redirect(request, 'event_form.html', {'form': EventForm()})
     else:
         form = EventForm(instance=event)
-    
     return render(request, 'event_form.html', {'form': form})
 
 # Delete Event
@@ -81,7 +96,7 @@ def category_create(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Category created successfully!')
-            return redirect('category_list')
+            return redirect('create_category')
     else:
         form = CategoryForm()
     return render(request, 'category_form.html', {'form': form})
@@ -94,7 +109,7 @@ def category_update(request, category_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Category updated successfully!')
-            return redirect('category_list')
+            return redirect('create_category')
     else:
         form = CategoryForm(instance=category)
     return render(request, 'category_form.html', {'form': form})
@@ -113,28 +128,34 @@ def participant_list(request):
 
 # Create Participant
 def participant_create(request):
-    if request.method == 'POST':
-        form = ParticipantForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Participant created successfully!')
-            return redirect('all_participants')
-    else:
-        form = ParticipantForm()
-    return render(request, 'participant_form.html', {'form': form})
+    try:
+        if request.method == 'POST':
+            form = ParticipantForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Participant created successfully!')
+                return redirect('create_participant')
+        else:
+            form = ParticipantForm()
+        return render(request, 'participant_form.html', {'form': form})
+    except Participant.DoesNotExist:
+        raise Http404("Participant not found")
 
 # Update Participant
 def participant_update(request, participant_id):
-    participant = Participant.objects.get(id=participant_id)
-    if request.method == 'POST':
-        form = ParticipantForm(request.POST, instance=participant)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Participant updated successfully!')
-            return redirect('all_participants')
-    else:    
-        form = ParticipantForm(instance=participant)
-    return render(request, 'participant_form.html', {'form': form})
+    try:
+        participant = Participant.objects.get(id=participant_id)
+        if request.method == 'POST':
+            form = ParticipantForm(request.POST, instance=participant)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Participant updated successfully!')
+                return redirect('create_participant')
+        else:
+            form = ParticipantForm(instance=participant)
+        return render(request, 'participant_form.html', {'form': form})
+    except Participant.DoesNotExist:
+        raise Http404("Participant not found")
 
 # Delete Participant    
 def participant_delete(request, participant_id):    
