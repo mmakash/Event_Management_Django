@@ -7,21 +7,122 @@ from django.db.models import Count, Q
 from django.utils.timezone import now
 from datetime import date
 
+
 # Create your views here.
+
 def dashboard(request):
-    events = Event.objects.select_related('category').prefetch_related('participants').all()
-    total_participants = events.aggregate(total_participants=Count('participants'))['total_participants'] or 0
+    # Initialize the events queryset
+    events = Event.objects.select_related('category').prefetch_related('participants')
+
+    # Search functionality
+    search_query = request.GET.get('search')
+    if search_query:
+        # Use Q objects to search by multiple fields (e.g., name or location)
+        events = events.filter(Q(name__icontains=search_query) | Q(location__icontains=search_query))
+
+    # Existing filters
+    category_id = request.GET.get('category_id')
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    location = request.GET.get('location')
+
+    if category_id:
+        events = events.filter(category_id=category_id)
+
+    if start_date and end_date:
+        events = events.filter(date__range=[start_date, end_date])
+
+    if location:
+        events = events.filter(location__icontains=location)
+
+    # Calculate totals and counts
     total_events = events.count()
-    upcomming_events = events.filter(date__gte=now().date()).count()
-    past_events = events.filter(date__lt=now().date()).count()
-    todays_events = events.filter(date=now().date())
-    return render(request, 'dashboard.html',{
-        'total_participants': total_participants,
+    total_participants = events.aggregate(total_participants=Count('participants'))['total_participants'] or 0
+
+    today = date.today()
+    todays_events = events.filter(date=today)
+    upcoming_events = events.filter(date__gt=today).count()
+    past_events = events.filter(date__lt=today).count()
+
+    # Prepare event data for the template
+    event_data = []
+    for event in events:
+        event_data.append({
+            'id': event.id,
+            'name': event.name,
+            'date': event.date,
+            'category': event.category.name if event.category else "Uncategorized",
+            'location': event.location,
+            'participants': [participant.name for participant in event.participants.all()],
+            'participant_count': event.participants.count(),
+        })
+
+    return render(request, 'dashboard.html', {
+        'events': event_data,
         'total_events': total_events,
-        'upcomming_events': upcomming_events,
+        'upcoming_events': upcoming_events,
         'past_events': past_events,
-        'todays_events': todays_events
+        'todays_events': todays_events,
+        'total_participants': total_participants,
     })
+
+#home
+def home(request):
+    # Initialize the events queryset
+    events = Event.objects.select_related('category').prefetch_related('participants')
+
+    # Search functionality
+    search_query = request.GET.get('search')
+    if search_query:
+        # Use Q objects to search by multiple fields (e.g., name or location)
+        events = events.filter(Q(name__icontains=search_query) | Q(location__icontains=search_query))
+
+    # Existing filters
+    category_id = request.GET.get('category_id')
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    location = request.GET.get('location')
+
+    if category_id:
+        events = events.filter(category_id=category_id)
+
+    if start_date and end_date:
+        events = events.filter(date__range=[start_date, end_date])
+
+    if location:
+        events = events.filter(location__icontains=location)
+
+    # Calculate totals and counts
+    total_participants = events.aggregate(total_participants=Count('participants'))['total_participants'] or 0
+
+    today = date.today()
+    today_events = events.filter(date=today)
+    upcoming_events_count = events.filter(date__gt=today).count()
+    past_events_count = events.filter(date__lt=today).count()
+    
+
+    # Prepare event data for the template
+    event_data = []
+    for event in events:
+        event_data.append({
+            'id': event.id,
+            'name': event.name,
+            'date': event.date,
+            'category': event.category.name if event.category else "Uncategorized",
+            'location': event.location,
+            'participants': [participant.name for participant in event.participants.all()],
+            'participant_count': event.participants.count(),
+        })
+
+    return render(request, 'home.html', {
+        'events': event_data,
+        'upcoming_events_count': upcoming_events_count,
+        'past_events_count': past_events_count,
+        'today_events': today_events,
+        'total_participants': total_participants,
+        # 'search_query': search_query,  # Pass the search query to the template
+    })
+
 
 # Read Events
 def events_list(request):

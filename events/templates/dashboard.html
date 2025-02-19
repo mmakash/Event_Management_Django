@@ -6,171 +6,226 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- For future interactive charts -->
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto p-4">
-        <!-- Navbar and Heading -->
-        <header class="text-gray-600 body-font">
-            <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-              <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-green-500 rounded-full" viewBox="0 0 24 24">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+<body>
+ {% comment %} navbar section start {% endcomment %}
+<nav class="bg-white border-gray-200 dark:bg-gray-900">
+    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <a href="{% url 'home' %}" class="flex items-center space-x-3 rtl:space-x-reverse">
+            <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
+            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Event Management</span>
+        </a>
+        <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+            <button type="button" class="text-white bg-[#FF5733] hover:bg-[#FF8C42] focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-[#FF5733] dark:hover:bg-[#FF8C42] dark:focus:ring-orange-800">
+                Get started
+            </button>
+            <button data-collapse-toggle="navbar-cta" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-cta" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
                 </svg>
-                <span href="{% url 'dashboard' %}" class="ml-3 text-xl">Event Management</span>
-              </a>
-              <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
-                <a href="{% url 'all_events' %}" class="mr-5 hover:text-gray-900">Event</a>
-                <a href="{% url 'category_list' %}" class="mr-5 hover:text-gray-900">Category</a>
-                <a href="{% url 'all_participants' %}" class="mr-5 hover:text-gray-900">Participant</a>
-                <a href="{% url 'dashboard' %}" class="mr-5 hover:text-gray-900">Dashboard</a>
-              </nav>
-            </div>
-        </header>
-
-          {% comment %} hero section start {% endcomment %}
-        <section class="text-gray-600 body-font">
-            <div class="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
-              <div class="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
-                <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">Before they sold out
-                  <br class="hidden lg:inline-block">readymade gluten
-                </h1>
-                <p class="mb-8 leading-relaxed">Copper mug try-hard pitchfork pour-over freegan heirloom neutra air plant cold-pressed tacos poke beard tote bag. Heirloom echo park mlkshk tote bag selvage hot chicken authentic tumeric truffaut hexagon try-hard chambray.</p>
-                <div class="flex justify-center">
-                  <button class="inline-flex text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg">Button</button>
-                  <button class="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">Button</button>
-                </div>
-              </div>
-              <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
-                <img class="object-cover object-center rounded" alt="hero" src="https://i.ibb.co.com/bRG4fKCH/image-1.jpg">
-              </div>
-            </div>
-        </section>
-        {% comment %} hero section end {% endcomment %}
-
-        {% comment %} all about events start {% endcomment %}
-        <section class="text-gray-600 body-font">
-            <div class="container px-5 py-24 mx-auto">
-              <div class="flex flex-wrap w-full mb-20">
-                <div class="lg:w-1/2 w-full mb-6 lg:mb-0">
-                  <h1 class="sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900">Pitchfork Kickstarter Taxidermy</h1>
-                  <div class="h-1 w-20 bg-green-500 rounded"></div>
-                </div>
-                <p class="lg:w-1/2 w-full leading-relaxed text-gray-500">Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical gentrify, subway tile poke farm-to-table. Franzen you probably haven't heard of them man bun deep jianbing selfies heirloom prism food truck ugh squid celiac humblebrag.</p>
-              </div>
-              <div class="flex flex-wrap -m-4">
-                <div class="xl:w-1/4 md:w-1/2 p-4">
-                  <div class="bg-gray-100 p-6 rounded-lg">
-                    <img class="h-40 rounded w-full object-cover object-center mb-6" src="https://i.ibb.co.com/0pfrrmmm/pexels-bbso-515173315-20733081.jpg" alt="content">
-                    <h3 class="tracking-widest text-green-500 text-7xl font-medium title-font">{{ total_events }}</h3>
-                    <h2 class="text-lg text-gray-900 font-medium title-font mb-4">Total Events</h2>
-                    <p class="leading-relaxed text-base">Fingerstache flexitarian street art 8-bit waistcoat. Distillery hexagon disrupt edison bulbche.</p>
-                  </div>
-                </div>
-                <div class="xl:w-1/4 md:w-1/2 p-4">
-                  <div class="bg-gray-100 p-6 rounded-lg">
-                    <img class="h-40 rounded w-full object-cover object-center mb-6" src="https://i.ibb.co.com/KpdRMHQX/pexels-bertellifotografia-2608517.jpg" alt="content">
-                    <h3 class="tracking-widest text-green-500 text-7xl font-medium title-font">{{ total_participants }}</h3>
-                    <h2 class="text-lg text-gray-900 font-medium title-font mb-4">Total Participants</h2>
-                    <p class="leading-relaxed text-base">Fingerstache flexitarian street art 8-bit waistcoat. Distillery hexagon disrupt edison bulbche.</p>
-                  </div>
-                </div>
-                <div class="xl:w-1/4 md:w-1/2 p-4">
-                  <div class="bg-gray-100 p-6 rounded-lg">
-                    <img class="h-40 rounded w-full object-cover object-center mb-6" src="https://i.ibb.co.com/G47WGGKk/pexels-henri-mathieu-8345973.jpg" alt="content">
-                    <h3 class="tracking-widest text-green-500 text-7xl font-medium title-font">{{ upcomming_events }}</h3>
-                    <h2 class="text-lg text-gray-900 font-medium title-font mb-4">Upcoming Events</h2>
-                    <p class="leading-relaxed text-base">Fingerstache flexitarian street art 8-bit waistcoat. Distillery hexagon disrupt edison bulbche.</p>
-                  </div>
-                </div>
-                <div class="xl:w-1/4 md:w-1/2 p-4">
-                  <div class="bg-gray-100 p-6 rounded-lg">
-                    <img class="h-40 rounded w-full object-cover object-center mb-6" src="https://i.ibb.co.com/WpdVvyky/pexels-bertellifotografia-3321791.jpg" alt="content">
-                    <h3 class="tracking-widest text-green-500 text-7xl font-medium title-font">{{ past_events }}</h3>
-                    <h2 class="text-lg text-gray-900 font-medium title-font mb-4">Past Events</h2>
-                    <p class="leading-relaxed text-base">Fingerstache flexitarian street art 8-bit waistcoat. Distillery hexagon disrupt edison bulbche.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        {% comment %} all about events end {% endcomment %}
-        
-
-
-
-        <!-- Today’s Events Listing -->
-        <div class="mt-8">
-            <h2 class="text-2xl font-bold mb-4">Today’s Events</h2>
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-                {% if todays_events %}
-                    <ul class="space-y-4">
-                        {% for event in todays_events %}
-                            <li class="border-b pb-2">
-                                <h3 class="text-lg font-semibold">{{ event.name }}</h3>
-                                <p class="text-gray-600">{{ event.date }} | {{ event.category.name }}</p>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p class="text-gray-600">No events scheduled for today.</p>
-                {% endif %}
-            </div>
+            </button>
         </div>
-
-        <!-- Interactive Stats Section -->
-        <div class="mt-8">
-            <h2 class="text-2xl font-bold mb-4">Event Statistics</h2>
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-                <div class="flex space-x-4 mb-4">
-                    <button onclick="loadData('total')" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Total Events</button>
-                    <button onclick="loadData('upcoming')" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Upcoming Events</button>
-                    <button onclick="loadData('past')" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Past Events</button>
-                </div>
-                <div id="stats-content" class="text-gray-600">
-                    <!-- Dynamic content will be loaded here -->
-                </div>
-            </div>
+        <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-cta">
+            <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                <li>
+                    <a href="{% url 'home' %}" class="block py-2 px-3 md:p-0 text-white bg-[#FF5733] rounded-sm md:bg-transparent md:text-[#FF5733] md:dark:text-[#FF8C42]" aria-current="page">Home</a>
+                </li>
+                <li>
+                    <a href="{% url 'dashboard' %}" class="block py-2 px-3 md:p-0 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#FF5733] md:dark:hover:text-[#FF8C42] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Dashboard</a>
+                </li>
+                <li>
+                    <a href="{% url 'category_list' %}" class="block py-2 px-3 md:p-0 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#FF5733] md:dark:hover:text-[#FF8C42] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Category</a>
+                </li>
+                <li>
+                    <a href="{% url 'all_participants' %}" class="block py-2 px-3 md:p-0 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#FF5733] md:dark:hover:text-[#FF8C42] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Participants</a>
+                </li>
+            </ul>
         </div>
     </div>
+</nav>
+{% comment %} navbar section end {% endcomment %}
 
-    <!-- JavaScript for Interactive Stats -->
-    <script>
-        function loadData(type) {
-            let content = document.getElementById('stats-content');
-            let data = {};
 
-            if (type === 'total') {
-                data = {
-                    title: 'Total Events',
-                    count: {{ total_events }},
-                    description: 'All events created so far.'
-                };
-            } else if (type === 'upcoming') {
-                data = {
-                    title: 'Upcoming Events',
-                    count: {{ upcomming_events }},
-                    description: 'Events scheduled for the future.'
-                };
-            } else if (type === 'past') {
-                data = {
-                    title: 'Past Events',
-                    count: {{ past_events }},
-                    description: 'Events that have already occurred.'
-                };
-            }
+  <!-- Dashboard Container -->
+  <div class="flex min-h-screen bg-gray-100">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-sm">
+        <nav class="mt-6">
+            <ul>
+                <li class="px-4 py-2 text-gray-700 hover:bg-gray-100">
+                    <a href="#" class="flex items-center">
+                        <span class="mr-2">📅</span>
+                        <span>Events</span>
+                    </a>
+                </li>
+                <li class="px-4 py-2 text-gray-700 hover:bg-gray-100">
+                    <a href="#" class="flex items-center">
+                        <span class="mr-2">👥</span>
+                        <span>Attendees</span>
+                    </a>
+                </li>
+                <li class="px-4 py-2 text-gray-700 hover:bg-gray-100">
+                    <a href="#" class="flex items-center">
+                        <span class="mr-2">📊</span>
+                        <span>Analytics</span>
+                    </a>
+                </li>
+                <li class="px-4 py-2 text-gray-700 hover:bg-gray-100">
+                    <a href="#" class="flex items-center">
+                        <span class="mr-2">⚙️</span>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
 
-            content.innerHTML = `
-                <h3 class="text-xl font-semibold">${data.title}</h3>
-                <p class="text-lg">${data.count}</p>
-                <p class="text-gray-600">${data.description}</p>
-            `;
-        }
+    <!-- Main Content -->
+    <main class="flex-1 p-8">
+        <!-- Header -->
+        <header class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-800">Dashboard</h2>
+            <p class="text-gray-600">Welcome back! Here's an overview of your events.</p>
+        </header>
 
-        // Load total events by default
-        document.addEventListener('DOMContentLoaded', function() {
-            loadData('total');
-        });
-    </script>
+       <!-- Stats Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <div class="bg-white p-6 rounded-lg shadow-sm">
+      <h3 class="text-lg font-semibold text-gray-700">Total Events</h3>
+      <p class="text-2xl font-bold text-gray-900">{{ total_events }}</p>
+  </div>
+  <div class="bg-white p-6 rounded-lg shadow-sm">
+      <h3 class="text-lg font-semibold text-gray-700">Upcoming Events</h3>
+      <p class="text-2xl font-bold text-gray-900">{{ upcoming_events|default:0 }}</p>
+  </div>
+  <div class="bg-white p-6 rounded-lg shadow-sm">
+      <h3 class="text-lg font-semibold text-gray-700">Participants</h3>
+      <p class="text-2xl font-bold text-gray-900">{{ total_participants }}</p>
+  </div>
+  <div class="bg-white p-6 rounded-lg shadow-sm">
+      <h3 class="text-lg font-semibold text-gray-700">Today's Events</h3>
+      {% if todays_events %}
+          <ul class="mt-4 space-y-2">
+              {% for event in todays_events %}
+                  <li class="text-gray-900">
+                      <span class="font-medium">{{ event.name }}</span> - {{ event.date }}
+                  </li>
+              {% endfor %}
+          </ul>
+      {% else %}
+          <p class="text-gray-600 mt-4">No events today.</p>
+      {% endif %}
+  </div>
+</div>
+
+
+        <!-- Recent Events Table -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Recent Events</h3>
+            <table class="w-full text-left">
+              <thead>
+                  <tr class="border-b">
+                      <th class="py-2">Event Name</th>
+                      <th class="py-2">Date</th>
+                      <th class="py-2">Category</th>
+                      <th class="py-2">Location</th>
+    
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for event in events %}
+                  <tr class="border-b">
+                      <td class="py-4">{{ event.name }}</td>
+                      <td class="py-4">{{ event.date }}</td>
+                      <td class="py-4">{{ event.category }}</td>
+                      <td class="py-4">{{ event.location }}</td>
+                      
+                  </tr>
+                  {% empty %}
+                  <tr>
+                      <td colspan="5" class="py-4 text-center text-gray-500">No events found</td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+          
+        </div>
+    </main>
+</div>
+
+    
+
+
+ {% comment %} footer section  {% endcomment %}
+ <footer class="bg-gray-900 text-gray-300 py-12">
+    <div class="container mx-auto px-6 md:px-12 lg:px-24">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Left Section: Company Info -->
+            <div>
+                <div class="flex items-center space-x-2 mb-4">
+                    <img src="https://i.ibb.co.com/G47WGGKk/pexels-henri-mathieu-8345973.jpg" alt="Logo" class="w-10">
+                    <h2 class="text-xl font-bold text-white">HARMONI <br> <span class="text-orange-500">EVENT MANAGEMENT</span></h2>
+                </div>
+                <ul class="space-y-2">
+                    <li class="flex items-center space-x-2">
+                        <span class="text-orange-500">📍</span>
+                        <span>100 Highland Ave, California, USA</span>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                        <span class="text-orange-500">📧</span>
+                        <a href="mailto:contact@pantero.com" class="hover:text-orange-500">contact@pantero.com</a>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                        <span class="text-orange-500">📞</span>
+                        <span>100 800 1234 5555</span>
+                    </li>
+                </ul>
+                <h3 class="mt-4 text-white font-semibold">Network</h3>
+                <div class="flex space-x-4 mt-2">
+                    <a href="#" class="hover:text-orange-500">🌐</a>
+                    <a href="#" class="hover:text-orange-500">🐦</a>
+                    <a href="#" class="hover:text-orange-500">📷</a>
+                </div>
+            </div>
+  
+            <!-- Middle Section: Useful Links -->
+            <div>
+                <h3 class="text-lg font-bold text-white mb-4">Useful <span class="text-orange-500">Links</span></h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-orange-500">➤ About Harmoni</a></li>
+                    <li><a href="#" class="hover:text-orange-500">➤ Disclaimer</a></li>
+                    <li><a href="#" class="hover:text-orange-500">➤ Contact Us</a></li>
+                    <li><a href="#" class="hover:text-orange-500">➤ Events Schedule</a></li>
+                    <li><a href="#" class="hover:text-orange-500">➤ Sponsors</a></li>
+                    <li><a href="#" class="hover:text-orange-500">➤ Venues</a></li>
+                    <li><a href="#" class="hover:text-orange-500">➤ Tickets</a></li>
+                    <li><a href="#" class="hover:text-orange-500">➤ Pricing Plans</a></li>
+                </ul>
+            </div>
+  
+            <!-- Right Section: Instagram Feed -->
+            <div>
+                <h3 class="text-lg font-bold text-white mb-4">Harmoni <span class="text-orange-500">Instagram</span></h3>
+                <div class="grid grid-cols-3 gap-2">
+                    <img src="https://i.ibb.co.com/bRG4fKCH/image-1.jpg" class="w-full h-full object-cover rounded">
+                    <img src="https://i.ibb.co.com/KpdRMHQX/pexels-bertellifotografia-2608517.jpg" class="w-full h-full object-cover rounded">
+                    <img src="https://i.ibb.co.com/G47WGGKk/pexels-henri-mathieu-8345973.jpg" class="w-full h-full object-cover rounded">
+                    <img src="https://i.ibb.co.com/G47WGGKk/pexels-henri-mathieu-8345973.jpg" class="w-full h-full object-cover rounded">
+                    <img src="https://i.ibb.co.com/KpdRMHQX/pexels-bertellifotografia-2608517.jpg" class="w-full h-full object-cover rounded">
+                    <img src="https://i.ibb.co.com/bRG4fKCH/image-1.jpg" class="w-full h-full object-cover rounded">
+                </div>
+                <p class="mt-4 text-gray-400">Follow Our Instagram <span class="text-orange-500">#Harmoni</span></p>
+            </div>
+  
+        </div>
+    </div>
+  </footer>
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 </body>
 </html>

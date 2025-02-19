@@ -6,26 +6,46 @@
     <title>All Participants</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto p-4">
-         <!-- Navbar and Heading -->
-     <header class="text-gray-600 body-font">
-        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-          <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-green-500 rounded-full" viewBox="0 0 24 24">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-            </svg>
-            <span href="{% url 'dashboard' %}" class="ml-3 text-xl">Event Management</span>
-          </a>
-          <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
-            <a href="{% url 'all_events' %}" class="mr-5 hover:text-gray-900">Event</a>
-            <a href="{% url 'category_list' %}" class="mr-5 hover:text-gray-900">Category</a>
-            <a href="{% url 'all_participants' %}" class="mr-5 hover:text-gray-900">Participant</a>
-            <a href="{% url 'dashboard' %}" class="mr-5 hover:text-gray-900">Dashboard</a>
-          </nav>
+<body>
+    {% comment %} navbar section start {% endcomment %}
+<nav class="bg-white border-gray-200 dark:bg-gray-900">
+    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <a href="{% url 'home' %}" class="flex items-center space-x-3 rtl:space-x-reverse">
+            <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
+            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Event Management</span>
+        </a>
+        <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+            <button type="button" class="text-white bg-[#FF5733] hover:bg-[#FF8C42] focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-[#FF5733] dark:hover:bg-[#FF8C42] dark:focus:ring-orange-800">
+                Get started
+            </button>
+            <button data-collapse-toggle="navbar-cta" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-cta" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+                </svg>
+            </button>
         </div>
-    </header>
+        <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-cta">
+            <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                <li>
+                    <a href="{% url 'home' %}" class="block py-2 px-3 md:p-0 text-white bg-[#FF5733] rounded-sm md:bg-transparent md:text-[#FF5733] md:dark:text-[#FF8C42]" aria-current="page">Home</a>
+                </li>
+                <li>
+                    <a href="{% url 'dashboard' %}" class="block py-2 px-3 md:p-0 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#FF5733] md:dark:hover:text-[#FF8C42] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Dashboard</a>
+                </li>
+                <li>
+                    <a href="{% url 'category_list' %}" class="block py-2 px-3 md:p-0 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#FF5733] md:dark:hover:text-[#FF8C42] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Category</a>
+                </li>
+                <li>
+                    <a href="{% url 'all_participants' %}" class="block py-2 px-3 md:p-0 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#FF5733] md:dark:hover:text-[#FF8C42] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Participants</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% comment %} navbar section end {% endcomment %}
 
+    <div class="container mx-auto p-4">
         <!-- Heading -->
         <h1 class="text-3xl font-bold text-center mb-6">All Participants</h1>
         {% for message in messages %}
@@ -36,7 +56,7 @@
 
         <!-- Add Participant Button -->
         <div class="text-center mb-6">
-            <a href="{% url 'create_participant' %}" class="mx-auto w-48 text-white bg-green-500 border-0 py-2 px-4 focus:outline-none hover:bg-green-600 rounded">
+            <a href="{% url 'create_participant' %}" class="text-white bg-[#FF5733] hover:bg-[#FF8C42] focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-[#FF5733] dark:hover:bg-[#FF8C42] dark:focus:ring-orange-800">
                 Add Participant
             </a>
         </div>
@@ -55,7 +75,7 @@
 
                             <!-- Actions (Edit and Delete) -->
                             <div class="space-x-2">
-                                <a href="{% url 'participant_update' participant.id %}" class="mx-auto w-48 text-white bg-green-500 border-0 py-2 px-4 focus:outline-none hover:bg-green-600 rounded">
+                                <a href="{% url 'participant_update' participant.id %}" class="mx-auto w-48 text-white bg-gray-900 border-0 py-2 px-4 focus:outline-none hover:bg-gray-800 rounded">
                                     Edit
                                 </a>
                                 <a href="{% url 'participant_delete' participant.id %}" class="mx-auto w-48 text-white bg-orange-500 border-0 py-2 px-4 focus:outline-none hover:bg-orange-600 rounded">
@@ -70,6 +90,73 @@
             {% endif %}
         </div>
     </div>
+
+     {% comment %} footer section  {% endcomment %}
+<footer class="bg-gray-900 text-gray-300 py-12">
+    <div class="container mx-auto px-6 md:px-12 lg:px-24">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Left Section: Company Info -->
+            <div>
+                <div class="flex items-center space-x-2 mb-4">
+                    <img src="https://i.ibb.co.com/G47WGGKk/pexels-henri-mathieu-8345973.jpg" alt="Logo" class="w-10">
+                    <h2 class="text-xl font-bold text-white">HARMONI <br> <span class="text-orange-500">EVENT MANAGEMENT</span></h2>
+                </div>
+                <ul class="space-y-2">
+                    <li class="flex items-center space-x-2">
+                        <span class="text-orange-500">📍</span>
+                        <span>100 Highland Ave, California, USA</span>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                        <span class="text-orange-500">📧</span>
+                        <a href="mailto:contact@pantero.com" class="hover:text-orange-500">contact@pantero.com</a>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                        <span class="text-orange-500">📞</span>
+                        <span>100 800 1234 5555</span>
+                    </li>
+                </ul>
+                <h3 class="mt-4 text-white font-semibold">Network</h3>
+                <div class="flex space-x-4 mt-2">
+                    <a href="#" class="hover:text-orange-500">🌐</a>
+                    <a href="#" class="hover:text-orange-500">🐦</a>
+                    <a href="#" class="hover:text-orange-500">📷</a>
+                </div>
+            </div>
+  
+            <!-- Middle Section: Useful Links -->
+            <div>
+                <h3 class="text-lg font-bold text-white mb-4">Useful <span class="text-orange-500">Links</span></h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-orange-500">➤ About Harmoni</a></li>
+                    <li><a href="#" class="hover:text-orange-500">➤ Disclaimer</a></li>
+                    <li><a href="#" class="hover:text-orange-500">➤ Contact Us</a></li>
+                    <li><a href="#" class="hover:text-orange-500">➤ Events Schedule</a></li>
+                    <li><a href="#" class="hover:text-orange-500">➤ Sponsors</a></li>
+                    <li><a href="#" class="hover:text-orange-500">➤ Venues</a></li>
+                    <li><a href="#" class="hover:text-orange-500">➤ Tickets</a></li>
+                    <li><a href="#" class="hover:text-orange-500">➤ Pricing Plans</a></li>
+                </ul>
+            </div>
+  
+            <!-- Right Section: Instagram Feed -->
+            <div>
+                <h3 class="text-lg font-bold text-white mb-4">Harmoni <span class="text-orange-500">Instagram</span></h3>
+                <div class="grid grid-cols-3 gap-2">
+                    <img src="https://i.ibb.co.com/bRG4fKCH/image-1.jpg" class="w-full h-full object-cover rounded">
+                    <img src="https://i.ibb.co.com/KpdRMHQX/pexels-bertellifotografia-2608517.jpg" class="w-full h-full object-cover rounded">
+                    <img src="https://i.ibb.co.com/G47WGGKk/pexels-henri-mathieu-8345973.jpg" class="w-full h-full object-cover rounded">
+                    <img src="https://i.ibb.co.com/G47WGGKk/pexels-henri-mathieu-8345973.jpg" class="w-full h-full object-cover rounded">
+                    <img src="https://i.ibb.co.com/KpdRMHQX/pexels-bertellifotografia-2608517.jpg" class="w-full h-full object-cover rounded">
+                    <img src="https://i.ibb.co.com/bRG4fKCH/image-1.jpg" class="w-full h-full object-cover rounded">
+                </div>
+                <p class="mt-4 text-gray-400">Follow Our Instagram <span class="text-orange-500">#Harmoni</span></p>
+            </div>
+  
+        </div>
+    </div>
+  </footer>
+  
 
     <script>
         setTimeout(() => {
